@@ -1,0 +1,23 @@
+.list-container {
+  width: 100%;
+  float: left;
+}
+
+.list-item {
+  border: 1px solid #333;
+  position: relative;
+  margin: 20px;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  float: left;
+}
+
+.list-item .message {
+  background-color: #66f;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
