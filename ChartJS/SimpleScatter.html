@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Simple Scatter Chart</title>
+    <script src="./common/Chart.js"></script>
+	<style>
+	#canvas {
+		width: "400px";
+        height: "200px";
+	}
+	</style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+	<script>
+        window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			
+            var scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Scatter Dataset 1',
+                            borderColor: 'red',
+                            backgroundColor: 'pink',
+                            data: [
+                                {
+                                    x: 0,
+                                    y: 1
+                                }, {
+                                    x: 0,
+                                    y: 5
+                                }, {
+                                    x: 1,
+                                    y: 5
+                                },
+                                {
+                                    x: 1,
+                                    y: 3
+                                }, {
+                                    x: 2,
+                                    y: 5
+                                }, {
+                                    x: 2,
+                                    y: 8
+                                }
+                            ]
+                        },
+                        {
+                            label: 'Scatter Dataset 2',
+                            borderColor: 'blue',
+                            backgroundColor: 'lightblue',
+                            data: [
+                                {
+                                    x: 0,
+                                    y: 3
+                                }, {
+                                    x: 0,
+                                    y: 4
+                                }, {
+                                    x: 1,
+                                    y: 1
+                                },
+                                {
+                                    x: 1,
+                                    y: 6
+                                }, {
+                                    x: 2,
+                                    y: 3
+                                }, {
+                                    x: 2,
+                                    y: 7
+                                }
+                            ]
+                        },
+
+                    ]
+                },
+                options: {
+                    scaleBeginAtZero: true,                 
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'linear',
+                            position: 'bottom',
+                            stepSize: 1
+                        }],
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            });
+		};
+    </script>
+</body>
+</html>

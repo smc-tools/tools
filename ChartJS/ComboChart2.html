@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Combo Chart 2</title>
+	<script src="./common/Chart.js"></script><style type="text/css">/* Chart.js */
+@-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+<body>
+  <canvas id="mixed-chart" width="800" height="450"></canvas>
+  <script> 
+    new Chart(document.getElementById("mixed-chart"), {
+        type: 'bar',
+        data: {
+          labels: ['1900', '1950', '1999', '2050'],
+          datasets: [
+            // {
+            //   label: 'Europe',
+            //   type: 'scatter',
+            //   borderColor: window.chartColors.red,
+				    //   backgroundColor: 'pink',
+            //   data: [{
+            //     x: 0,
+            //     y: 300,
+            //   }, {
+            //     x: 1,
+            //     y: 450,
+            //   }, {
+            //     x: 2,
+            //     y: 500,
+            //   }, {
+            //     x: 3,
+            //     y: 600,
+            //   }]
+            // }, {
+            //   label: 'Africa',
+            //   type: 'scatter',
+            //   borderColor: window.chartColors.blue,
+            //   backgroundColor: 'lightblue',
+            //   data: [{
+            //     x: 0,
+            //     y: 350,
+            //   }, {
+            //     x: 1,
+            //     y: 500,
+            //   }, {
+            //     x: 2,
+            //     y: 600,
+            //   }, {
+            //     x: 3,
+            //     y: 650,
+            //   }]
+            // }, 
+            {
+              label: 'Europe',
+              type: 'line',
+              borderColor: '#8e5ea2',
+              data: [408,547,675,734],
+              fill: false
+            }, {
+              label: 'Africa',
+              type: 'line',
+              borderColor: '#3e95cd',
+              data: [133,221,783,2478],
+              fill: false
+            }, {
+              label: 'Europe',
+              type: 'bar',
+              backgroundColor: 'dodgerblue',
+              data: [408,547,675,734],
+            }, {
+              label: 'Africa',
+              type: 'bar',
+              backgroundColor: 'green',
+              backgroundColorHover: '#3e95cd',
+              data: [133,221,783,2478]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Population growth (millions): Europe & Africa'
+          },
+          legend: { 
+            display: true,
+            position: 'bottom'
+          }
+        }
+    });
+  </script>
+</body></html>
