@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Range Bar Sample 2</title>
+  <script type="text/javascript" src="./common/Chart.js"></script>
+  <script src="./common/moment.js"></script>
+  <style type="text/css">
+    #theChart {
+      /* display: block; */
+      width: 80%; 
+      /* height: 100%; */
+      padding-top: 100px;
+    }
+  </style>
+
+  <script type="text/javascript">
+    function newDate(days) {
+      var tempDate = moment().add(days, 'd').toDate();
+
+      var formattedDate = moment(tempDate).format('M/D/YY');
+      return formattedDate;
+    }   
+
+    window.onload=function(){
+      //Assuming Chart object is within scope or a closure here. ;)
+      Chart.defaults.rangeBar = Chart.defaults.bar;
+      console.log(typeof Chart.defaults.rangeBar);
+      Chart.controllers.rangeBar = Chart.controllers.bar.extend({
+        calculateBarValuePixels: function(datasetIndex, index) {
+          var me = this;
+          var chart = me.chart;
+          var meta = me.getMeta();
+          var scale = me.getValueScale();
+          var datasets = chart.data.datasets;
+          //Use a range object { min: [Number], max: [Number] } instead of
+          //a single value
+          //var value = Number(datasets[datasetIndex].data[index]);
+          var value = Number(datasets[datasetIndex].data[index].max) - Number(datasets[datasetIndex].data[index].min);
+          var stacked = scale.options.stacked;
+          var stack = meta.stack;
+          //Use the min value of the range object
+          //var start = 0;
+          var start = Number(datasets[datasetIndex].data[index].min);
+          var i, imeta, ivalue, base, head, size;
+
+          if (stacked || (stacked === undefined && stack !== undefined)) {
+            for (i = 0; i < datasetIndex; ++i) {
+              imeta = chart.getDatasetMeta(i);
+              if (imeta.bar &&
+                imeta.stack === stack &&
+                imeta.controller.getValueScaleId() === scale.id &&
+                chart.isDatasetVisible(i)) {
+                ivalue = Number(datasets[i].data[index].max);
+                if ((value < 0 && ivalue < 0) || (value >= 0 && ivalue > 0)) {
+                  start += ivalue;
+                }
+              }
+            }
+          }
+          base = scale.getPixelForValue(start);
+          head = scale.getPixelForValue(start + value);
+          size = (head - base) / 2;
+
+          return {
+            size: size,
+            base: base,
+            head: head,
+            center: head + size / 2
+          };
+        },
+        draw: function() {
+          var me = this;
+          var chart = me.chart;
+          var elements = me.getMeta().data;
+          var dataset = me.getDataset();
+          var ilen = elements.length;
+          var i = 0;
+          var d;
+
+          //Since this method was stolen from controller.bar.js, this
+          //closure is out of scope.  Reference from the Chart closure
+          //instead.
+          //helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+          Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+
+          for (; i < ilen; ++i) {
+            d = dataset.data[i];
+            //Use a range object { min: [Number], max: [Number] }
+            //instead of a single value
+            //if (d !== null && d !== undefined && !isNaN(d)) {
+            if (d !== null && d !== undefined && !isNaN(d.min) && !isNaN(d.max)) {
+              elements[i].draw();
+            }
+          }
+
+          //Since this method was stolen from controller.bar.js, this closure is out of scope.
+          //Reference from the Chart closure instead.
+          //helpers.canvas.unclipArea(chart.ctx);
+          Chart.helpers.canvas.unclipArea(chart.ctx);
+        }
+      });
+
+
+      // parameters for the chart
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var data = {
+        labels: [newDate(-5), newDate(-4), newDate(-3), newDate(-2), newDate(-1), newDate(0)],
+        datasets: [{
+          label: 'Sample Bar Data',
+          backgroundColor: 'rgb(54, 162, 235)',
+          data: [{
+            min: 10,
+            max: 47
+          }, {
+            min: 15,
+            max: 45
+          }, {
+            min: 20,
+            max: 40
+          }, {
+            min: 10,
+            max: 35
+          }, {
+            min: 12,
+            max: 28
+          }, {
+            min: 30,
+            max: 55
+          }]
+        }]
+      };
+
+      // chart options with override to display proper values
+      var options = {
+        scaleBeginAtZero: false,
+        scales: {
+          xAxes: [{
+            display: true,
+          }],
+          // xAxes: [{
+          //   type: 'time',
+          //   time: {
+          //     unit: 'day',
+          //     round: 'day',
+          //     displayFormats: {
+          //       day: 'M/D/YY'
+          //     }
+          //   }
+          // }],
+          yAxes: [{
+            display: true,
+            ticks: {
+              min: 5,
+              max: 60,
+              beginAtZero: false,
+              stepSize: 5
+            }
+          }]
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+              if (label) {
+                label += ': ';
+              }
+              label += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].min.toString();
+              label += ' - ';
+              label += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].max.toString();
+              return label;
+            }
+          }
+        },
+        legend: {
+          display: true,
+          position: 'bottom'
+        }
+      }
+
+      var myBarChart = new Chart(ctx, {
+        type: 'rangeBar',
+        data: data,
+        options: options
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <div id="theChart">
+    <canvas id="myChart"></canvas>
+  </div>
+</body>
+</html>

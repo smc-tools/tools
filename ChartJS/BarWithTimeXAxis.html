@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Bar Chart with Time Axis</title>
+    <script src="./common/Chart.js"></script>
+    <script src="./common/moment.js"></script>
+	<style>
+	#canvas {
+		width: "400px";
+        height: "200px";
+	}
+	</style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+	<script>
+        function newDate(days) {
+            return moment().add(days, 'd').toDate();
+        }   
+
+        window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+            
+            var scatterChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [newDate(-5), newDate(-4), newDate(-3), newDate(-2), newDate(-1), newDate(0)],
+                    datasets: [{
+                        label: 'Sample Data',
+                        data: [2, 5, 3, 4, 7, 3],
+                        borderColor: "rgba(220,20,20,1)",
+                        backgroundColor: "rgba(220,20,20,0.5)"
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                round: 'day',
+                                displayFormats: {
+                                    day: 'M/D/YY'
+                                }
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                            beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });   
+		};
+    </script>
+</body>
+</html>
+
