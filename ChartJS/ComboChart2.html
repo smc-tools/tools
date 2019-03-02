@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Combo Chart 2</title>
-	<script src="./common/Chart.js"></script><style type="text/css">/* Chart.js */
-@-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}</style>
+  <script src="./common/Chart.js"></script>
 	<style>
 	canvas {
 		-moz-user-select: none;
@@ -13,7 +12,7 @@
 	</style>
 </head>
 <body>
-  <canvas id="mixed-chart" width="800" height="450"></canvas>
+  <canvas id="mixed-chart" width="600" height="350"></canvas>
   <script> 
     new Chart(document.getElementById("mixed-chart"), {
         type: 'bar',
@@ -88,9 +87,32 @@
             display: true,
             text: 'Population growth (millions): Europe & Africa'
           },
-          legend: { 
+          legend: {
             display: true,
-            position: 'bottom'
+            position: 'bottom',
+            labels: {
+              fontColor: 'rgb(255, 99, 132)'
+            },
+            onClick: function(e, legendItem) {
+              var index = legendItem.datasetIndex;
+              var ci = this.chart;
+              var alreadyHidden = (ci.getDatasetMeta(index).hidden === null) ? false : ci.getDatasetMeta(index).hidden;
+
+              ci.data.datasets.forEach(function(e, i) {
+                var meta = ci.getDatasetMeta(i);
+
+                if (i !== index) {
+                  if (!alreadyHidden) {
+                    meta.hidden = meta.hidden === null ? !meta.hidden : null;
+                  } else if (meta.hidden === null) {
+                    meta.hidden = true;
+                  }
+                } else if (i === index) {
+                  meta.hidden = null;
+                }
+              });
+              ci.update();
+            }
           }
         }
     });
